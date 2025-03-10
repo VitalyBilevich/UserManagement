@@ -1,7 +1,16 @@
 using UserManagement.Infrastructure.Extensions;
 using UserManagement.Application.Extensions;
+using UserManagement.Application.Validation;
 
 var builder = WebApplication.CreateBuilder(args);
+var configuration = builder.Configuration;
+var configurationValidationResult = ConfigurationValidator.ValidateRepositoryType(configuration);
+if (!configurationValidationResult.IsValid)
+{
+    Console.WriteLine($"Configuration Error: {configurationValidationResult.ErrorMessage}");
+    return;
+}
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

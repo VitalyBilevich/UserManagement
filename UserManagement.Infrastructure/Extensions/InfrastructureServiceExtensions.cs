@@ -5,6 +5,7 @@ using UserManagement.Infrastructure.Repositories;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Configurations;
 using UserManagement.Infrastructure.Caching;
+using UserManagement.Application.Constants;
 
 namespace UserManagement.Infrastructure.Extensions
 {
@@ -16,7 +17,7 @@ namespace UserManagement.Infrastructure.Extensions
             services.AddSingleton(typeof(IInMemoryCacheService<,>), typeof(InMemoryCacheService<,>));
 
             // CacheSettings from appsettings.json
-            services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
+            services.Configure<CacheSettings>(configuration.GetSection(CacheSettingsConfigNames.CacheSettings));
 
             services.AddSingleton<IInMemoryCacheServiceFactory, InMemoryCacheServiceFactory>();
 

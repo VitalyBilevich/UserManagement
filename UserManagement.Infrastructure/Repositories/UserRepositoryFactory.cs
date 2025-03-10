@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using UserManagement.Domain.Interfaces;
 using UserManagement.Application.Interfaces;
+using UserManagement.Application.Constants;
 using UserManagement.Application.Configurations;
 
 namespace UserManagement.Infrastructure.Repositories
@@ -16,19 +17,17 @@ namespace UserManagement.Infrastructure.Repositories
             _serviceProvider = serviceProvider;
         }
 
-        public IUserRepository Create(string key)
+        public IUserRepository Create(string repositoryType)
         {
-            return key switch
+            return repositoryType switch
             {
-                "InMemoryCache" =>
+                UserRepositoryTypes.InMemoryCache =>
                  new InMemoryCacheUserRepository(
                     _serviceProvider.GetRequiredService<IInMemoryCacheServiceFactory>(),
                     _serviceProvider.GetRequiredService<IOptions<CacheSettings>>()
                 ),
-
-
-                "InMemory" => new InMemoryUserRepository(),
-                _ => throw new ArgumentException($"Invalid User repository type: {key}")
+                UserRepositoryTypes.InMemory => new InMemoryUserRepository(),
+                _ => throw new ArgumentException($"Invalid User repository type: {repositoryType}")
             };
         }
     }

@@ -4,6 +4,6 @@ namespace UserManagement.Application.Interfaces
 {
     public interface IUserRepositoryFactory
     {
-        IUserRepository Create(string key);
+        IUserRepository Create(string repositoryType);
     }
 }

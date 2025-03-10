@@ -1,4 +1,6 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Configuration;
+using UserManagement.Application.Constants;
 using UserManagement.Application.Interfaces;
 using UserManagement.Application.Models.DTOs;
 using UserManagement.Domain.Interfaces;
@@ -10,10 +12,11 @@ public class GetAllUsersHandler : IRequestHandler<GetAllUsersQuery, IEnumerable<
     private readonly IUserRepositoryFactory _userRepositoryFactory;
     private readonly IUserRepository _userRepository;
 
-    public GetAllUsersHandler(IUserRepositoryFactory userRepositoryFactory)
+    public GetAllUsersHandler(IUserRepositoryFactory userRepositoryFactory, IConfiguration configuration)
     {
         _userRepositoryFactory = userRepositoryFactory;
-        _userRepository = _userRepositoryFactory.Create("InMemoryCache");
+        var repositoryType = configuration[UserRepositoryTypes.ConfigKey] ?? UserRepositoryTypes.InMemoryCache;
+        _userRepository = _userRepositoryFactory.Create(repositoryType);
     }
 
     public async Task<IEnumerable<UserDto>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
